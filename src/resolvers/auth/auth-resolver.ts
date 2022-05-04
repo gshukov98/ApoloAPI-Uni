@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args, Ctx } from "type-graphql";
 import { User, UserModel } from "../../entities/user-entity";
 import bcryptjs from "bcryptjs";
-import { LoginArguments } from "./login-argumen";
+import { LoginArguments } from "./login-arguments";
 import { AuthenticationError, UserInputError } from "apollo-server-core";
 import { getToken } from "./token";
 import { Context } from "./context";
