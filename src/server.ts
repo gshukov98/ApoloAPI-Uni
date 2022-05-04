@@ -1,7 +1,7 @@
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import express from "express";
-import { expressjwt } from "express-jwt"
+import jwt from "express-jwt"
 import "reflect-metadata";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -19,7 +19,7 @@ const graphQlPath = process.env.GRAPHQL_PATH;
 const port = process.env.PORT;
 const dbUrl = process.env.MONGODB_URL;
 
-const auth = expressjwt({
+const auth = jwt({
     secret: process.env.JWT_SECRET,
     algorithms: ['HS256'],
     credentialsRequired: false,
