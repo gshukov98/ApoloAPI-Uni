@@ -23,6 +23,10 @@ export class User {
     @Prop({ required: true })
     @Field()
     password: string;
+
+    @Prop({ default: Date.now() })
+    @Field()
+    lastLogin?: number;
 }
 
 export const UserModel = getModelForClass(User)

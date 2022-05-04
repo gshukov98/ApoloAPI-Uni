@@ -21,12 +21,14 @@ type Mutation {
   createUser(data: CreateUserInput!): User!
   deleteUser(_id: String!): User!
   editUser(_id: String!, data: EditUserInput!): User!
+  login(email: String!, password: String!): String!
 }
 
 """Mongo object id scalar type"""
 scalar ObjectId
 
 type Query {
+  currentUser: User!
   userById(_id: String!): User!
   users: [User!]!
 }
@@ -35,6 +37,7 @@ type User {
   _id: ObjectId!
   email: String!
   firstName: String!
+  lastLogin: Float!
   lastName: String!
   password: String!
 }

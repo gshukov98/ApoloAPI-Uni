@@ -1,12 +1,16 @@
 import { ApolloServer } from "apollo-server-express";
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import express from "express";
+import { expressjwt } from "express-jwt"
 import "reflect-metadata";
 import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
 import http from "http";
-import { getSchema } from "./schema"
+import { getSchema } from "./schema";
+import geoip from "geoip-lite";
+import { Context } from "./resolvers/auth/context";
+import MobileDetect from "mobile-detect";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -14,6 +18,12 @@ dotenv.config();
 const graphQlPath = process.env.GRAPHQL_PATH;
 const port = process.env.PORT;
 const dbUrl = process.env.MONGODB_URL;
+
+const auth = expressjwt({
+    secret: process.env.JWT_SECRET,
+    algorithms: ['HS256'],
+    credentialsRequired: false,
+})
 
 mongoose.connect(dbUrl, {
     autoIndex: true
@@ -32,23 +42,38 @@ async function startApolloServer() {
         cors({
             origin: '*'
         }),
-        bodyParser.json()
+        bodyParser.json(),
+        auth
     )
 
     const schema = await getSchema();
 
     const server = new ApolloServer({
         schema,
-        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-        introspection: true
+        plugins: [
+            ApolloServerPluginDrainHttpServer({ httpServer }),
+            ApolloServerPluginLandingPageGraphQLPlayground(),
+        ],
+        introspection: true,
+        context: ({req}) => {
+            const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+            const context: Context = {
+              req,
+              user: req.user,
+              ip,
+              location: geoip.lookup(ip),
+              md: new MobileDetect(req.headers['user-agent']),
+            }
+            return context;
+        },
     });
     await server.start();
 
-    server.applyMiddleware({ app, path: '/' });
+    server.applyMiddleware({ app, path: graphQlPath });
     await new Promise(resolve => httpServer.listen({ port }));
 
     console.log(`Server started at http://localhost:${port}/${graphQlPath}`)
-    return {server, app}
+    return { server, app }
 }
 
 startApolloServer()
