@@ -17,9 +17,27 @@ input EditUserInput {
   password: String
 }
 
+type Motorcycle {
+  _id: ObjectId!
+  category: String!
+  image: String!
+  make: String!
+  model: String!
+}
+
+input MotorcycleInput {
+  category: String!
+  image: String!
+  make: String!
+  model: String!
+}
+
 type Mutation {
+  createMotorcycle(data: MotorcycleInput!): Motorcycle!
   createUser(data: CreateUserInput!): User!
+  deleteMotorcycle(_id: String!): Motorcycle!
   deleteUser(_id: String!): User!
+  editMotorcycle(_id: String!, data: MotorcycleInput!): Motorcycle!
   editUser(_id: String!, data: EditUserInput!): User!
   login(email: String!, password: String!): String!
 }
@@ -29,6 +47,8 @@ scalar ObjectId
 
 type Query {
   currentUser: User!
+  motorcycleById(_id: String!): Motorcycle!
+  motorcycles: [Motorcycle!]!
   userById(_id: String!): User!
   users: [User!]!
 }

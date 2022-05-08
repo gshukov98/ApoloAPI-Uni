@@ -12,7 +12,7 @@ export class UserResolver {
     }
 
     @Query(returns => User)
-    async userById(@Arg("_id") _id: string): Promise<User[]> {
+    async userById(@Arg("_id") _id: string): Promise<User> {
         return await UserModel.findById(_id);
     }
 
