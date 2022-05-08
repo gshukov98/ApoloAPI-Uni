@@ -1,5 +1,6 @@
 import { IsEmail, MaxLength, MinLength } from "class-validator";
 import { Field, InputType } from "type-graphql";
+import { MotorcycleInput } from "../motorcycle/motorcycle-arguments";
 
 @InputType()
 export class CreateUserInput {
@@ -37,4 +38,7 @@ export class EditUserInput {
     @Field({ nullable: true })
     @MinLength(6)
     password?: string;
+
+    @Field(type => [MotorcycleInput])
+    motorcycles?: MotorcycleInput[]
 }

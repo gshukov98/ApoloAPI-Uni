@@ -6,6 +6,7 @@ import * as path from "path";
 import { ObjectId } from "mongodb";
 import { ObjectIdScalar } from "./object-id.scalar";
 import { MotorcycleResolver } from "./resolvers/motorcycle/motorcycle-resolver";
+import { authChecker } from "./resolvers/auth/auth-checker";
 
 export const getSchema = async () => {
     const schema = await buildSchema({
@@ -16,7 +17,8 @@ export const getSchema = async () => {
         ],
         emitSchemaFile: path.resolve(__dirname, "schema.gql"),
         globalMiddlewares: [TypegooseMiddleware],
-        scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }]
+        scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }],
+        authChecker
     });
     return schema
 }

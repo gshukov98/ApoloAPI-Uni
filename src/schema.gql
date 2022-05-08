@@ -10,10 +10,18 @@ input CreateUserInput {
   password: String!
 }
 
+input EditMotorcycleInput {
+  category: String!
+  image: String!
+  make: String!
+  model: String!
+}
+
 input EditUserInput {
   email: String
   firstName: String
   lastName: String
+  motorcycles: [MotorcycleInput!]!
   password: String
 }
 
@@ -26,6 +34,7 @@ type Motorcycle {
 }
 
 input MotorcycleInput {
+  _id: ObjectId!
   category: String!
   image: String!
   make: String!
@@ -33,11 +42,11 @@ input MotorcycleInput {
 }
 
 type Mutation {
-  createMotorcycle(data: MotorcycleInput!): Motorcycle!
+  createMotorcycle(data: EditMotorcycleInput!): Motorcycle!
   createUser(data: CreateUserInput!): User!
   deleteMotorcycle(_id: String!): Motorcycle!
   deleteUser(_id: String!): User!
-  editMotorcycle(_id: String!, data: MotorcycleInput!): Motorcycle!
+  editMotorcycle(_id: String!, data: EditMotorcycleInput!): Motorcycle!
   editUser(_id: String!, data: EditUserInput!): User!
   login(email: String!, password: String!): String!
 }
@@ -59,5 +68,7 @@ type User {
   firstName: String!
   lastLogin: Float!
   lastName: String!
+  motorcycles: [Motorcycle!]!
   password: String!
+  roles: [String!]!
 }

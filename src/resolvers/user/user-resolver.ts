@@ -1,7 +1,8 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, Authorized } from "type-graphql";
 import { User, UserModel } from "../../entities/user-entity";
 import { CreateUserInput, EditUserInput } from "./user-arguments";
 import bcryptjs from "bcryptjs";
+import { UserRoles } from "./user-role";
 
 @Resolver()
 export class UserResolver {
@@ -29,6 +30,7 @@ export class UserResolver {
         return await UserModel.findByIdAndUpdate(_id, userData, { new: true });
     }
 
+    @Authorized([UserRoles.SUPER_ADMIN])
     @Mutation(returns => User)
     async deleteUser(@Arg("_id") _id: string): Promise<User> {
         return await UserModel.findByIdAndRemove(_id);

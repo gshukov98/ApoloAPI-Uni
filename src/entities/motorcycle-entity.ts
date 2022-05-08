@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 export class Motorcycle {
 
     @Field()
-    _id: ObjectId;
+    readonly _id: ObjectId;
 
     @Prop({ required: true })
     @Field()
@@ -25,4 +25,4 @@ export class Motorcycle {
     image: string;
 }
 
-export const MotorcycleModel = getModelForClass(Motorcycle)
+export const MotorcycleModel = getModelForClass(Motorcycle, { schemaOptions: { timestamps: true } })
