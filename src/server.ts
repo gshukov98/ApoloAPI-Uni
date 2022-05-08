@@ -52,7 +52,7 @@ async function startApolloServer() {
         schema,
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
-            //ApolloServerPluginLandingPageGraphQLPlayground(),
+            ApolloServerPluginLandingPageGraphQLPlayground(),
         ],
         introspection: true,
         context: ({req}) => {

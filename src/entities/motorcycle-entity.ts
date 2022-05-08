@@ -4,7 +4,6 @@ import { ObjectId } from "mongodb";
 
 @ObjectType()
 export class Motorcycle {
-
     @Field()
     readonly _id: ObjectId;
 
